@@ -15,11 +15,11 @@ class ChronalCoordinatesTest {
     fun testPart1Input() = assertEquals(5975, part1(load("input.txt")))
 
     @Test
-    fun testPart2Example() = assertEquals(16, part2(load("example.txt")))
+    fun testPart2Example() = assertEquals(16, part2(load("example.txt"), 32))
 
     @Test
-    fun testPart2Testing() = assertEquals(0, part2(load("testing.txt")))
+    fun testPart2Testing() = assertEquals(0, part2(load("testing.txt"), 32))
 
     @Test
-    fun testPart2Input() = assertEquals(0, part2(load("input.txt")))
+    fun testPart2Input() = assertEquals(38670, part2(load("input.txt"), 10000))
 }
