@@ -32,7 +32,17 @@ class Instructions(file: File) : Iterable<List<Char>> {
     }
 }
 
-fun part1(file: File) = Instructions(file).fold("") { acc, step -> acc + step }
+fun part1(file: File): String {
+    var res = ""
+    val iterator = Instructions(file).iterator()
+    while (iterator.hasNext()) {
+        val step = iterator.next().first()
+        iterator.takeStep(step)
+        iterator.finishStep(step)
+        res += step
+    }
+    return res
+}
 
 class Worker(val id: Int, private val additionalStepDuration: Int) {
     private var workingTill: Int? = null
@@ -40,7 +50,7 @@ class Worker(val id: Int, private val additionalStepDuration: Int) {
         private set
 
     fun workOn(step: Char, second: Int) {
-        println("${"$second".padStart(3, ' ')} Worker $id takes step $step!")
+        // println("${"$second".padStart(3, ' ')} Worker $id takes step $step!")
         this.step = step
         workingTill = second + step.toInt() - 64 + additionalStepDuration - 1
     }
@@ -49,7 +59,7 @@ class Worker(val id: Int, private val additionalStepDuration: Int) {
         workingTill?.let {
             if (second >= it) {
                 workingTill = null
-                println("${"$second".padStart(3, ' ')} Worker $id finishes step $step!")
+                // println("${"$second".padStart(3, ' ')} Worker $id finishes step $step!")
                 return step.also { step = null }
             }
         }
