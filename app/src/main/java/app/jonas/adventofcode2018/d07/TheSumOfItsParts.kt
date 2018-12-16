@@ -4,17 +4,19 @@ import java.io.File
 
 val pattern = Regex("Step ([A-Z]) must be finished before step ([A-Z]) can begin\\.")
 
-class InstructionsIterator(private var steps: MutableMap<Char, MutableSet<Char>>) : Iterator<List<Char>> {
+class InstructionsIterator(private var steps: MutableMap<Char, MutableSet<Char>>) :
+    Iterator<Pair<InstructionsIterator, List<Char>>> {
+
     override fun hasNext() = steps.isNotEmpty()
 
-    override fun next() = steps.filter { it.value.isEmpty() }.keys.sorted()
+    override fun next() = this to steps.filter { it.value.isEmpty() }.keys.sorted()
 
     fun takeStep(step: Char) = steps.remove(step)
 
     fun finishStep(step: Char) = steps.forEach { it.value.remove(step) }
 }
 
-class Instructions(file: File) : Iterable<List<Char>> {
+class Instructions(file: File) : Iterable<Pair<InstructionsIterator, List<Char>>> {
     override fun iterator() = InstructionsIterator(steps.toMutableMap())
 
     private val steps = file.readLines().fold(mutableMapOf<Char, MutableSet<Char>>()) { steps, line ->
@@ -32,16 +34,11 @@ class Instructions(file: File) : Iterable<List<Char>> {
     }
 }
 
-fun part1(file: File): String {
-    var res = ""
-    val iterator = Instructions(file).iterator()
-    while (iterator.hasNext()) {
-        val step = iterator.next().first()
-        iterator.takeStep(step)
-        iterator.finishStep(step)
-        res += step
-    }
-    return res
+fun part1(file: File) = Instructions(file).fold("") { res, (iterator, steps) ->
+    val step = steps.first()
+    iterator.takeStep(step)
+    iterator.finishStep(step)
+    res + step
 }
 
 class Worker(val id: Int, private val additionalStepDuration: Int) {
@@ -73,8 +70,8 @@ fun part2(file: File, workerCount: Int, additionalStepDuration: Int): Int {
     val iterator = Instructions(file).iterator()
     val workers = Array(workerCount) { i -> Worker(i, additionalStepDuration) }
     var second = 0
-    while (true) {
-        val nextSteps = iterator.next()
+    while (iterator.hasNext() || workers.any { it.step != null }) {
+        val (_, nextSteps) = iterator.next()
         val (idle, working) = workers.partition { it.step == null }
         nextSteps.zip(idle).forEach { (step, worker) ->
             iterator.takeStep(step)
@@ -91,10 +88,8 @@ fun part2(file: File, workerCount: Int, additionalStepDuration: Int): Int {
             1
         } else {
             val minWorkingTime = workers.mapNotNull { it.timeLeft(second) }.min()
-            minWorkingTime ?: 1 // Nobody is working → check next second
-        }
-        if (!iterator.hasNext() && someoneFinished) {
-            return second
+            minWorkingTime ?: throw Error("Nobody is working: shouldn't happen!")
         }
     }
+    return second
 }
