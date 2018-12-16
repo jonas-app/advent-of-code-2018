@@ -12,8 +12,8 @@ class TheSumOfItsPartsTest {
     fun testPart1Input() = assertEquals("EUGJKYFQSCLTWXNIZMAPVORDBH", part1(load("input.txt")))
 
     @Test
-    fun testPart2Testing() = assertEquals(0, part2(load("testing.txt")))
+    fun testPart2Example() = assertEquals(15, part2(load("example.txt"), 2, 0))
 
     @Test
-    fun testPart2Input() = assertEquals(0, part2(load("input.txt")))
+    fun testPart2Input() = assertEquals(1014, part2(load("input.txt"), 5, 60))
 }
