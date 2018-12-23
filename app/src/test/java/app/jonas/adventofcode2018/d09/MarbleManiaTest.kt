@@ -27,8 +27,8 @@ class MarbleManiaTest {
     fun testPart1Input() = assertEquals(400493, part1(load("input.txt")))
 
     @Test
-    fun testPart2Example() = assertEquals(0, part2(load("example.txt")))
+    fun testPart2Example() = assertEquals(22563, part2(load("example.txt")))
 
     @Test
-    fun testPart2Input() = assertEquals(0, part2(load("input.txt")))
+    fun testPart2Input() = assertEquals(3338341690, part2(load("input.txt")))
 }
