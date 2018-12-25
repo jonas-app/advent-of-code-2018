@@ -26,8 +26,11 @@ class TheStarsAlignTest {
     fun testPart1Input() = assertEquals("243,64", part1(5468))
 
     @Test
-    fun testPart2Example() = assertEquals("0,0", part2(8))
+    fun testPart2Example1() = assertEquals("90,269,16", part2(18))
 
     @Test
-    fun testPart2Input() = assertEquals("0,0", part2(5468))
+    fun testPart2Example2() = assertEquals("232,251,12", part2(42))
+
+    @Test
+    fun testPart2Input() = assertEquals("90,101,15", part2(5468))
 }
