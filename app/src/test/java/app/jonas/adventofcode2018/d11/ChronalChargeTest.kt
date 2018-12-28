@@ -3,7 +3,7 @@ package app.jonas.adventofcode2018.d11
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class TheStarsAlignTest {
+class ChronalChargeTest {
     @Test
     fun testCalculatePowerLevel1() = assertEquals(4, calculatePowerLevel(x = 3, y = 5, serialNumber = 8))
 
